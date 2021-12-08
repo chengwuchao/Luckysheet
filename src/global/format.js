@@ -479,7 +479,10 @@ var make_ssf = function make_ssf(SSF) {
         function write_num_pct(type, fmt, val) {
             var sfmt = fmt.replace(pct1, ""),
                 mul = fmt.length - sfmt.length;
-            return write_num(type, sfmt, val * Math.pow(10, 2 * mul)) + fill("%", mul);
+             // 修改的代码
+             return write_num(type, sfmt, val) + fill("%", mul);
+             // 原始代码
+             // return write_num(type, sfmt, val * Math.pow(10, 2 * mul)) + fill("%", mul);
         }
 
         function write_num_cm(type, fmt, val) {
@@ -686,7 +689,10 @@ var make_ssf = function make_ssf(SSF) {
         function write_num_pct2(type, fmt, val) {
             var sfmt = fmt.replace(pct1, ""),
                 mul = fmt.length - sfmt.length;
-            return write_num(type, sfmt, val * Math.pow(10, 2 * mul)) + fill("%", mul);
+                // 原始代码
+                // return write_num(type, sfmt, val * Math.pow(10, 2 * mul)) + fill("%", mul);
+              // 修改的代码
+             return write_num(type, sfmt, val) + fill("%", mul);
         }
 
         function write_num_exp2(fmt, val) {

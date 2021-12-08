@@ -94,7 +94,7 @@ function setcellvalue(r, c, d, v) {
     else if(vupdateStr.substr(-1) === "%" && isRealNum(vupdateStr.substring(0, vupdateStr.length-1))){
             cell.ct = {fa: "0%", t: "n"};
             cell.v = vupdateStr.substring(0, vupdateStr.length-1) / 100;
-            cell.m = vupdate;
+            cell.m = vupdate; 
     }
     else if(valueIsError(vupdate)){
         cell.m = vupdateStr;
@@ -110,6 +110,10 @@ function setcellvalue(r, c, d, v) {
     else{
         if(cell.f != null && isRealNum(vupdate) && !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(vupdate)){
             cell.v = parseFloat(vupdate);
+             // 以下是新增的代码
+             if(cell.ct && cell.ct && cell.ct.fa.indexOf('%') !== -1 && cell.f.indexOf('/') !== -1) {
+                cell.v = cell.v * 100;
+            }
             if(cell.ct==null){
                 cell.ct = { "fa": "General", "t": "n" };
             }
