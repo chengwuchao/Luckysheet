@@ -92,9 +92,36 @@ function setcellvalue(r, c, d, v) {
         cell.v = false;
     }
     else if(vupdateStr.substr(-1) === "%" && isRealNum(vupdateStr.substring(0, vupdateStr.length-1))){
-            cell.ct = {fa: "0%", t: "n"};
-            cell.v = vupdateStr.substring(0, vupdateStr.length-1) / 100;
-            cell.m = vupdate; 
+        cell.ct = {fa: "0%", t: "n"};
+        cell.v = vupdateStr.substring(0, vupdateStr.length-1) / 100;
+        cell.m = vupdate; 
+    }
+    else if(!cell.f && isRealNum(vupdateStr) && cell.ct && cell.ct.fa.indexOf('%') !== -1) {
+        let isFormated = false;
+        if (vupdate == cell.v && cell.m) {
+            const cellM = cell.m.substring(0, cell.m.length - 1);
+            const cellMArr = cellM.split('.');
+            const digitalNum = cellMArr[1] ? cellMArr[1].length : 0;
+            isFormated = Number(cellM) == Number(vupdate * 100).toFixed(digitalNum);
+        }
+        
+        // 判断输入的是数字，并且单元格格式含有 %
+         if(!isFormated){
+            vupdate = parseFloat(vupdate) / 100;
+        }
+
+        let mask = update(cell.ct.fa, vupdate);
+
+        if(mask === vupdate){ //若原来单元格格式 应用不了 要更新的值，则获取更新值的 格式
+            mask = genarate(vupdate);
+
+            cell.m = mask[0].toString();
+            cell.ct = mask[1];
+            cell.v = mask[2];
+        } else {
+          cell.m = mask.toString();
+          cell.v = vupdate;
+        }
     }
     else if(valueIsError(vupdate)){
         cell.m = vupdateStr;
@@ -109,11 +136,24 @@ function setcellvalue(r, c, d, v) {
     }
     else{
         if(cell.f != null && isRealNum(vupdate) && !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(vupdate)){
+            // if(cell.ct && cell.ct && cell.ct.fa.indexOf('%') !== -1 && cell.f.indexOf('/') !== -1) {
+            //     if (cell.excuteTimes === 0) {
+            //         vupdate =  parseFloat(vupdate) * 100; 
+            //         times = 1;
+            //     }
+            //     console.log(['vupdate111111-----', vupdate]);
+            //     console.log(['vvv---3333', cell]);
+            //     if (!cell.hasOwnProperty('isUploaded')) {
+            //         console.log('isUploaded');
+            //     } else {
+            //         // delete cell.isUploaded;
+            //     }
+            //     console.log(['vvv---8888888', cell]);
+            // }
+           
             cell.v = parseFloat(vupdate);
              // 以下是新增的代码
-             if(cell.ct && cell.ct && cell.ct.fa.indexOf('%') !== -1 && cell.f.indexOf('/') !== -1) {
-                cell.v = cell.v * 100;
-            }
+            
             if(cell.ct==null){
                 cell.ct = { "fa": "General", "t": "n" };
             }
