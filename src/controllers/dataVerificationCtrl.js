@@ -1329,6 +1329,12 @@ const dataVerificationCtrl = {
 
         }
         else if(type == 'number' || type == 'number_integer' || type == 'number_decimal'){
+           
+            // 修复为空时，触发数据校验的bug
+            if(cellValue == null || cellValue.toString().replace(/\s/g, "") === ""){
+                return true;
+            }
+            
             if(!isRealNum(cellValue)){
                 return false;
             }
