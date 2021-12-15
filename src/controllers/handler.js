@@ -5422,7 +5422,10 @@ export default function luckysheetHandler() {
                                 cell.m = "";
                             }
                             else {
-                                let mask = genarate($td.text());
+                                // 原始代码
+                                //let mask = genarate($td.text());
+                                // 为了修复从本地excel复制时数字格式右侧存在空格造成的bug
+                                let mask = genarate($.trim($td.text()));
                                 cell.v = mask[2];
                                 cell.ct = mask[1];
                                 cell.m = mask[0];
