@@ -5714,6 +5714,17 @@ const luckysheetformula = {
                 }
                 updateValue.v = item.v;
                 updateValue.f = item.f;
+                
+                // 如果是 % 格式，并且是公式时，重新计算 vupdate
+                data = data || Store.flowdata;
+                const cellItem = data[item.r][item.c];
+                if (cellItem && cellItem.ct && cellItem.ct.fa && cellItem.ct.fa.indexOf('%') !== -1) {
+                    const clc_result = _this.execfunction(item.f, item.r, item.c, item.index, null, true);
+                    if (clc_result) {
+                        updateValue.v = clc_result[1];
+                    }
+                }
+
                 setcellvalue(item.r, item.c, data, updateValue);
                 server.saveParam("v", item.index, item.v, {
                     "r": item.r,

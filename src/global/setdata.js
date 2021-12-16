@@ -136,23 +136,7 @@ function setcellvalue(r, c, d, v) {
     }
     else{
         if(cell.f != null && isRealNum(vupdate) && !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(vupdate)){
-            // if(cell.ct && cell.ct && cell.ct.fa.indexOf('%') !== -1 && cell.f.indexOf('/') !== -1) {
-            //     if (cell.excuteTimes === 0) {
-            //         vupdate =  parseFloat(vupdate) * 100; 
-            //         times = 1;
-            //     }
-            //     console.log(['vupdate111111-----', vupdate]);
-            //     console.log(['vvv---3333', cell]);
-            //     if (!cell.hasOwnProperty('isUploaded')) {
-            //         console.log('isUploaded');
-            //     } else {
-            //         // delete cell.isUploaded;
-            //     }
-            //     console.log(['vvv---8888888', cell]);
-            // }
-           
             cell.v = parseFloat(vupdate);
-             // 以下是新增的代码
             
             if(cell.ct==null){
                 cell.ct = { "fa": "General", "t": "n" };
