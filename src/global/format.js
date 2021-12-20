@@ -1780,6 +1780,9 @@ export function genarate(value) {//万 单位格式增加！！！
             for (let i = 0; i < value.split('.')[1].length; i++) {
                 fa += 0
             }
+
+            // 修复copy操作时，金额丢失小数位的bug
+            v = v + '.' + value.split('.')[1];
         }
         ct= {fa, t: "n"}
     } else if(value.toString().substr(0, 1) === "'"){
