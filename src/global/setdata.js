@@ -96,33 +96,33 @@ function setcellvalue(r, c, d, v) {
         cell.v = vupdateStr.substring(0, vupdateStr.length-1) / 100;
         cell.m = vupdate; 
     }
-    else if(!cell.f && isRealNum(vupdateStr) && cell.ct && cell.ct.fa.indexOf('%') !== -1) {
-        let isFormated = false;
-        if (vupdate == cell.v && cell.m) {
-            const cellM = cell.m.substring(0, cell.m.length - 1);
-            const cellMArr = cellM.split('.');
-            const digitalNum = cellMArr[1] ? cellMArr[1].length : 0;
-            isFormated = Number(cellM) == Number(vupdate * 100).toFixed(digitalNum);
-        }
+    // else if(!cell.f && isRealNum(vupdateStr) && cell.ct && cell.ct.fa.indexOf('%') !== -1) {
+    //     let isFormated = false;
+    //     if (vupdate == cell.v && cell.m) {
+    //         const cellM = cell.m.substring(0, cell.m.length - 1);
+    //         const cellMArr = cellM.split('.');
+    //         const digitalNum = cellMArr[1] ? cellMArr[1].length : 0;
+    //         isFormated = Number(cellM) == Number(vupdate * 100).toFixed(digitalNum);
+    //     }
         
-        // 判断输入的是数字，并且单元格格式含有 %
-         if(!isFormated){
-            vupdate = parseFloat(vupdate) / 100;
-        }
+    //     // 判断输入的是数字，并且单元格格式含有 %
+    //      if(!isFormated){
+    //         vupdate = parseFloat(vupdate) / 100;
+    //     }
 
-        let mask = update(cell.ct.fa, vupdate);
+    //     let mask = update(cell.ct.fa, vupdate);
 
-        if(mask === vupdate){ //若原来单元格格式 应用不了 要更新的值，则获取更新值的 格式
-            mask = genarate(vupdate);
+    //     if(mask === vupdate){ //若原来单元格格式 应用不了 要更新的值，则获取更新值的 格式
+    //         mask = genarate(vupdate);
 
-            cell.m = mask[0].toString();
-            cell.ct = mask[1];
-            cell.v = mask[2];
-        } else {
-          cell.m = mask.toString();
-          cell.v = vupdate;
-        }
-    }
+    //         cell.m = mask[0].toString();
+    //         cell.ct = mask[1];
+    //         cell.v = mask[2];
+    //     } else {
+    //       cell.m = mask.toString();
+    //       cell.v = vupdate;
+    //     }
+    // }
     else if(valueIsError(vupdate)){
         cell.m = vupdateStr;
         // cell.ct = { "fa": "General", "t": "e" };

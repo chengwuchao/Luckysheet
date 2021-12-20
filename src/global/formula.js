@@ -1233,7 +1233,6 @@ const luckysheetformula = {
         });
     },
     updatecell: function (r, c, value, isRefresh = true) {
-
         let _this = this;
 
         let $input = $("#luckysheet-rich-text-editor");
@@ -1310,6 +1309,11 @@ const luckysheetformula = {
 
         // API, we get value from user
         value = value || $input.text();
+
+        // 判断输入的是数字，并且单元格格式含有 %
+        if(isRealNum(value) && curv && curv.ct && curv.ct.fa.indexOf('%') !== -1) {
+            value =  parseFloat(value) / 100;
+        }
 
         // Hook function
         if (!method.createHookFunction("cellUpdateBefore", r, c, value, isRefresh)) {
@@ -5455,6 +5459,7 @@ const luckysheetformula = {
             //此处setcellvalue 中this.execFunctionGroupData会保存想要更新的值，本函数结尾不要设为null,以备后续函数使用
             // setcellvalue(origin_r, origin_c, _this.execFunctionGroupData, value);
             let cellCache = [[{ v: null }]];
+            console.log('-----');
             setcellvalue(0, 0, cellCache, value);
             _this.execFunctionGlobalData[origin_r + "_" + origin_c + "_" + index] = cellCache[0][0];
 
@@ -5715,16 +5720,6 @@ const luckysheetformula = {
                 updateValue.v = item.v;
                 updateValue.f = item.f;
                 
-                // 如果是 % 格式，并且是公式时，重新计算 vupdate
-                data = data || Store.flowdata;
-                const cellItem = data[item.r][item.c];
-                if (cellItem && cellItem.ct && cellItem.ct.fa && cellItem.ct.fa.indexOf('%') !== -1) {
-                    const clc_result = _this.execfunction(item.f, item.r, item.c, item.index, null, true);
-                    if (clc_result) {
-                        updateValue.v = clc_result[1];
-                    }
-                }
-
                 setcellvalue(item.r, item.c, data, updateValue);
                 server.saveParam("v", item.index, item.v, {
                     "r": item.r,
