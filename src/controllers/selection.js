@@ -681,6 +681,11 @@ const selection = {
             let d = editor.deepCopyFlowData(Store.flowdata);//取数据
             let rowMaxLength = d.length;
             let cellMaxLength = d[0].length;
+            
+            // 如果粘贴有公式单元格则跳出覆盖
+            if (this.alertFormulaCellByCopy(d, minh, maxh, minc, maxc)) {
+                return;
+            }
 
             //若应用范围超过最大行或最大列，增加行列
             let addr = maxh - rowMaxLength + 1, addc = maxc - cellMaxLength + 1;
@@ -930,6 +935,11 @@ const selection = {
         let d = editor.deepCopyFlowData(Store.flowdata);//取数据
         let rowMaxLength = d.length;
         let cellMaxLength = d[0].length;
+        
+        // 如果粘贴有公式单元格则跳出覆盖
+        if (this.alertFormulaCellByCopy(d, minh, maxh, minc, maxc)) {
+            return;
+        }
 
         let addr = copyh + minh - rowMaxLength, addc = copyc + minc - cellMaxLength;
         if(addr > 0 || addc > 0){
@@ -1411,6 +1421,11 @@ const selection = {
         let d = editor.deepCopyFlowData(Store.flowdata);//取数据
         let rowMaxLength = d.length;
         let cellMaxLength = d[0].length;
+        
+        // 如果粘贴有公式单元格则跳出覆盖
+        if (this.alertFormulaCellByCopy(d, minh, maxh, minc, maxc)) {
+            return;
+        }
 
         //若应用范围超过最大行或最大列，增加行列
         let addr = copyh + minh - rowMaxLength, addc = copyc + minc - cellMaxLength;
@@ -1682,6 +1697,12 @@ const selection = {
 
         let d = editor.deepCopyFlowData(Store.flowdata);//取数据
         let cellMaxLength = d[0].length;
+
+         // 如果粘贴有公式单元格则跳出覆盖
+         if (this.alertFormulaCellByCopy(d, minh, maxh, minc, maxc)) {
+            return;
+        }
+
         let rowMaxLength = d.length;
 
         let borderInfoCompute = getBorderInfoCompute(copySheetIndex);
@@ -1951,6 +1972,23 @@ const selection = {
         }
 
         return true;
+    },
+    // 新增判断不可粘贴覆盖含公式的单元格
+    alertFormulaCellByCopy(d, minh, maxh, minc, maxc) {
+        let res = false;
+        for (let h_index = minh; h_index <= maxh; h_index++) {
+            for (let c_index = minc; c_index <= maxc; c_index++) {
+                    let k = d[h_index][c_index];
+                    console.log('####复制粘贴公式判断####');
+                    if (k && k.f != null) {
+                    tooltip.info('<i class="fa fa-exclamation-triangle"></i>提示', '不可粘贴覆盖含公式的单元格');
+                    res = true;
+                    break;
+                }
+            }
+        }
+
+        return res;
     }
 };
 
