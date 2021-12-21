@@ -1807,6 +1807,14 @@ export function genarate(value) {//万 单位格式增加！！！
         m = value.toString();
         ct = { "fa": "@", "t": "s" };
     }
+    else if(isRealNum(value) && Number(value).toFixed(0).length >= 18){ // 大于等于18位整数的数字默认格式为纯字符
+        m = value.toString();
+        ct = { "fa": "@", "t": "s" };
+    }
+    // else if (/^[^_IOZSVa-z\W]{2}\d{6}[^_IOZSVa-z\W]{10}$/g.test(value)) { // 统一社会信用代码判断
+    //     m = value.toString();
+    //     ct = { "fa": "@", "t": "s" };
+    // }
     else if(isRealNum(value) && Math.abs(parseFloat(value)) > 0 && (Math.abs(parseFloat(value)) >= 1e+11 || Math.abs(parseFloat(value)) < 1e-9)){
         v = numeral(value).value();
         var str = v.toExponential();
