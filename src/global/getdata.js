@@ -8,6 +8,7 @@ import sheetmanage from '../controllers/sheetmanage';
 import { isInlineStringCT,isInlineStringCell,convertCssToStyleList } from '../controllers/inlineString';
 import locale from '../locale/locale';
 import Store from '../store';
+import { isRealNum } from './validate';
 
 //Get selection range value
 export function getdatabyselection(range, sheetIndex) {
@@ -270,7 +271,13 @@ export function getOrigincell(r, c, i) {
 }
 
 export function getRealCellValue(r, c){
-    let value = getcellvalue(r, c, null, "m");
+  // 如果是纯数字则直接返回其原始值 
+  let value = null;
+   value = getcellvalue(r, c);
+   if (isRealNum(value)) {
+       return value;
+   }
+    value = getcellvalue(r, c, null, "m");
     if(value == null){
         value = getcellvalue(r, c);
         if(value==null){
