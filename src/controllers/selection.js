@@ -681,7 +681,7 @@ const selection = {
             let d = editor.deepCopyFlowData(Store.flowdata);//取数据
             let rowMaxLength = d.length;
             let cellMaxLength = d[0].length;
-            
+
             // 如果粘贴有公式单元格则跳出覆盖
             if (this.alertFormulaCellByCopy(d, minh, maxh, minc, maxc)) {
                 return;
@@ -721,7 +721,9 @@ const selection = {
                         value = data[h - minh][c - minc];
                     }
 
+                    const originCellFa = x[c] && x[c].ct && x[c].ct.fa;
                     x[c] = $.extend(true, {}, value);
+                    this.specialHandleByCopy(x[c], originCellFa);
 
                     if(value != null && "mc" in x[c]){
                         if(x[c]["mc"].rs != null){
@@ -1068,7 +1070,9 @@ const selection = {
                     value = copyData[h - minh][c - minc];
                 }
 
+                const originCellFa = x[c] && x[c].ct && x[c].ct.fa;
                 x[c] = $.extend(true, {}, value);
+                this.specialHandleByCopy(x[c], originCellFa);
 
                 if(value != null && copyHasMC && ("mc" in x[c])){
                     if(x[c]["mc"].rs != null){
@@ -1550,7 +1554,9 @@ const selection = {
                             }
                         }
 
+                        const originCellFa = x[c] && x[c].ct && x[c].ct.fa;
                         x[c] = $.extend(true, {}, value);
+                        this.specialHandleByCopy(x[c], originCellFa);
 
                         if(value != null && copyHasMC && ("mc" in x[c])){
                             if(x[c]["mc"].rs != null){
@@ -1989,6 +1995,13 @@ const selection = {
         }
 
         return res;
+    },
+    specialHandleByCopy(cell, originCellFa) {
+        // 如果拷贝的值是数字并且当前的cell格式为数字，则只覆盖值，不覆盖cell格式
+        if (originCellFa && isRealNum(cell.v) && (originCellFa.indexOf('%') !== -1 || originCellFa.indexOf('#,##0') !== -1 || originCellFa == 0 || originCellFa.indexOf('0.0') !== -1)) {
+            cell.ct.fa = originCellFa;
+            cell.m = update(originCellFa, parseFloat(cell.v));
+        }
     }
 };
 
