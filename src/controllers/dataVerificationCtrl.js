@@ -276,6 +276,8 @@ const dataVerificationCtrl = {
             let colIndex = last.column_focus;
 
             $("#luckysheet-rich-text-editor").text(value);
+            // dropdown 选择之后，将 rangetosheet 置为当前的 currentSheetIndex
+            formula.rangetosheet = Store.currentSheetIndex;
             formula.updatecell(rowIndex, colIndex);
 
             e.stopPropagation();
